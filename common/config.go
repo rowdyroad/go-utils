@@ -10,15 +10,27 @@ import (
 	log "github.com/rowdyroad/go-simple-logger"
 )
 
-func LoadConfigFromFile(config interface{}, configFile string) {
+func LoadConfigFromFile(config interface{}, configFile string, defaultValue interface{}) {
 	log.Debugf("Reading configuration from '%s'", configFile)
 	file, err := os.Open(configFile)
 	if err != nil {
+		log.Warn("Configuration not found")
+		if defaultValue != nil {
+			log.Warn("Default value is defined. Use it.")
+			config = defaultValue
+			return
+		}
 		panic(err)
 	}
 	defer file.Close()
 	decoder := yaml.NewDecoder(file)
 	if err := decoder.Decode(config); err != nil {
+		log.Warn("Configuration incorrect ")
+		if defaultValue != nil {
+			log.Warn("Default value is defined. Use it.")
+			config = defaultValue
+			return
+		}
 		panic(err)
 	}
 
@@ -42,10 +54,10 @@ func LoadConfigFromFile(config interface{}, configFile string) {
 	log.Debug("Config loaded successfully")
 }
 
-func LoadConfig(config interface{}, defaultFilename string) {
+func LoadConfig(config interface{}, defaultFilename string, defaultValue interface{}) {
 	var configFile string
 	flag.StringVar(&configFile, "c", defaultFilename, "Config file")
 	flag.StringVar(&configFile, "config", defaultFilename, "Config file")
 	flag.Parse()
-	LoadConfigFromFile(config, configFile)
+	LoadConfigFromFile(config, configFile, defaultValue)
 }
