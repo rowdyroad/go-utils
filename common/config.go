@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/go-yaml/yaml"
+	"github.com/jinzhu/copier"
 	log "github.com/rowdyroad/go-simple-logger"
 )
 
@@ -16,8 +17,8 @@ func LoadConfigFromFile(config interface{}, configFile string, defaultValue inte
 	if err != nil {
 		log.Warn("Configuration not found")
 		if defaultValue != nil {
-			log.Warn("Default value is defined. Use it.")
-			config = defaultValue
+			log.Warn("Default value is defined. Using it.")
+			copier.Copy(config, defaultValue)
 			return
 		}
 		panic(err)
@@ -28,7 +29,7 @@ func LoadConfigFromFile(config interface{}, configFile string, defaultValue inte
 		log.Warn("Configuration incorrect ")
 		if defaultValue != nil {
 			log.Warn("Default value is defined. Use it.")
-			config = defaultValue
+			copier.Copy(config, defaultValue)
 			return
 		}
 		panic(err)
