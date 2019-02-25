@@ -1,0 +1,9 @@
+address: 127.0.0.1:32771
+routes:
+  hello:
+    topics: [test-topic]
+    strict: false
+
+subscriptions:
+  hi:
+    - topic: test-topic
