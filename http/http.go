@@ -12,7 +12,7 @@ func Response(w http.ResponseWriter, code int, data interface{}) {
 	if data != nil {
 		response, err = json.Marshal(data)
 		if err != nil {
-			HTTPError(w, "Internal Error", http.StatusInternalServerError)
+			Error(w, "Internal Error", http.StatusInternalServerError)
 			return
 		}
 	}
@@ -25,7 +25,7 @@ func Response(w http.ResponseWriter, code int, data interface{}) {
 func ParseJSON(w http.ResponseWriter, r *http.Request, data interface{}) bool {
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(data); err != nil && err != io.EOF {
-		HTTPError(w, "Unprocessable Entity", http.StatusUnprocessableEntity)
+		Error(w, "Unprocessable Entity", http.StatusUnprocessableEntity)
 		return false
 	}
 	return true
