@@ -133,6 +133,8 @@ func (b *Broker) RemoveRoute(route string) {
 func (b *Broker) Subscribe(message string, callback interface{}) {
 	log.Debug("Subscribe for message:", message)
 	config := nsq.NewConfig()
+	config.MaxAttempts = 0
+	
 	t := reflect.TypeOf(callback)
 	if t.NumIn() != 1 {
 		log.Crit("Incorrect callback signature")
