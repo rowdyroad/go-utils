@@ -131,10 +131,12 @@ func (b *Broker) RemoveRoute(route string) {
 
 //Subscribe for message from broker. Callback must be func(item <type of message>) error.
 func (b *Broker) Subscribe(message string, callback interface{}) {
+	b.SubscribeWithConfig(message, callback, nsq.NewConfig())
+}
+
+//SubscribeWithConfig for message from broker with custom config. Callback must be func(item <type of message>) error.
+func (b *Broker) SubscribeWithConfig(message string, callback interface{}, config *nsq.Config) {
 	log.Debug("Subscribe for message:", message)
-	config := nsq.NewConfig()
-	config.MaxAttempts = 0
-	
 	t := reflect.TypeOf(callback)
 	if t.NumIn() != 1 {
 		log.Crit("Incorrect callback signature")
