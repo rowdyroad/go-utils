@@ -199,8 +199,13 @@ func (b *Broker) Subscribe(message string, callback interface{}) {
 	}
 }
 
-//Publish message to broker.
+//Publish message to broker with custom config.
 func (b *Broker) Publish(message string, data interface{}) error {
+	return b.PublishWithConfig(message, data, nsq.NewConfig())
+}
+
+//PublishWithConfig message to broker with custom config.
+func (b *Broker) PublishWithConfig(message string, data interface{}, config *nsq.Config) error {
 	log.Debug("Publish message:", message)
 	routes, has := b.config.Routes[message]
 	if !has {
@@ -208,7 +213,6 @@ func (b *Broker) Publish(message string, data interface{}) error {
 	}
 
 	if b.producer == nil {
-		config := nsq.NewConfig()
 		w, err := nsq.NewProducer(b.config.Address, config)
 		if err != nil {
 			return err
