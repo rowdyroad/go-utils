@@ -22,13 +22,13 @@ func Response(w http.ResponseWriter, code int, data interface{}) {
 	}
 }
 
-func ParseJSON(w http.ResponseWriter, r *http.Request, data interface{}) bool {
+func ParseJSON(w http.ResponseWriter, r *http.Request, data interface{}) error {
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(data); err != nil && err != io.EOF {
 		Error(w, "Unprocessable Entity", http.StatusUnprocessableEntity)
-		return false
+		return err
 	}
-	return true
+	return nil
 }
 
 func FieldsError(w http.ResponseWriter, err map[string]string) {
