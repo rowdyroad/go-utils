@@ -55,10 +55,11 @@ func LoadConfigFromFile(config interface{}, configFile string, defaultValue inte
 	log.Debug("Config loaded successfully")
 }
 
-func LoadConfig(config interface{}, defaultFilename string, defaultValue interface{}) {
+func LoadConfig(config interface{}, defaultFilename string, defaultValue interface{}) string {
 	var configFile string
 	flag.StringVar(&configFile, "c", defaultFilename, "Config file")
 	flag.StringVar(&configFile, "config", defaultFilename, "Config file")
 	flag.Parse()
 	LoadConfigFromFile(config, configFile, defaultValue)
+	return configFile
 }
